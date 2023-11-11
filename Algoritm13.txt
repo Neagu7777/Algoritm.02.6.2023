@@ -1,0 +1,129 @@
+Реализуйте в виде кода, текста или псевдокода одно из следующих заданий на выбор:
+
+public static int countConsonantIteration(String str) {
+   int count = 0;
+   for (int i = 0; i < str.length(); i++) {
+       if (isConsonant(str.charAt(i))) {
+           count++;
+       }
+   }
+   return count;
+}
+
+
+Реализовать метод countConsonantRecursion(str, strLength)
+Для решения использовать рекурсивный подход
+
+
+ИЛИ
+
+
+Ханойская башня
+Задача заключается в следующем. Имеется три стержня — левый, средний и правый. На левом стержне находятся n дисков, 
+диаметры которых различны. Диски упорядочены по размеру диаметра, сверху лежит наименьший, снизу — наибольший. 
+Требуется перенести диски с левого стержня на правый, используя средний стержень как вспомогательный.
+Головоломка имеет следующие два правила:
+      1. Вы не можете поместить больший диск на меньший диск.
+      2. За один раз можно перемещать только один диск.
+Реализуйте два подхода для решения.
+Итеративно
+Рекурсивно
+
+
+### Рекурсивный подсчет согласных:
+
+public class ConsonantCounter {
+    public static void main(String[] args) {
+        String inputString = "Hello, World!";
+        int consonantCount = countConsonantRecursion(inputString, inputString.length());
+        System.out.println("Number of consonants: " + consonantCount);
+    }
+
+    public static int countConsonantRecursion(String str, int strLength) {
+        if (strLength == 0) {
+            return 0;
+        } else {
+            char currentChar = str.charAt(str.length() - strLength);
+            if (isConsonant(currentChar)) {
+                return 1 + countConsonantRecursion(str, strLength - 1);
+            } else {
+                return countConsonantRecursion(str, strLength - 1);
+            }
+        }
+    }
+
+    public static boolean isConsonant(char ch) {
+        // Проверка, является ли символ согласной буквой
+        return Character.isLetter(ch) && !isVowel(ch);
+    }
+
+    public static boolean isVowel(char ch) {
+        // Проверка, является ли символ гласной буквой
+        char lowerCase = Character.toLowerCase(ch);
+        return lowerCase == 'a' || lowerCase == 'e' || lowerCase == 'i' || lowerCase == 'o' || lowerCase == 'u';
+    }
+}
+
+### Решение задачи о Ханойской башне (рекурсивно и итеративно):
+
+import java.util.Stack;
+
+public class HanoiTower {
+    public static void main(String[] args) {
+        int n = 3; // Количество дисков
+
+        System.out.println("Рекурсивное решение:");
+        solveHanoiRecursive(n, 'A', 'B', 'C');
+
+        System.out.println("\nИтеративное решение:");
+        solveHanoiIterative(n, 'A', 'B', 'C');
+    }
+
+    // Рекурсивное решение задачи Ханойской башни
+    public static void solveHanoiRecursive(int n, char source, char auxiliary, char target) {
+        if (n > 0) {
+            solveHanoiRecursive(n - 1, source, target, auxiliary);
+            System.out.println("Move disk " + n + " from " + source + " to " + target);
+            solveHanoiRecursive(n - 1, auxiliary, source, target);
+        }
+    }
+
+    // Итеративное решение задачи Ханойской башни
+    public static void solveHanoiIterative(int n, char source, char auxiliary, char target) {
+        Stack<Integer> diskStack = new Stack<>();
+        Stack<Character> sourceStack = new Stack<>();
+        Stack<Character> auxiliaryStack = new Stack<>();
+        Stack<Character> targetStack = new Stack<>();
+
+        diskStack.push(n);
+        sourceStack.push(source);
+        auxiliaryStack.push(auxiliary);
+        targetStack.push(target);
+
+        while (!diskStack.isEmpty()) {
+            int currentDisk = diskStack.pop();
+            char currentSource = sourceStack.pop();
+            char currentAuxiliary = auxiliaryStack.pop();
+            char currentTarget = targetStack.pop();
+
+            if (currentDisk == 1) {
+                System.out.println("Move disk " + currentDisk + " from " + currentSource + " to " + currentTarget);
+            } else {
+                diskStack.push(currentDisk - 1);
+                sourceStack.push(currentAuxiliary);
+                auxiliaryStack.push(currentSource);
+                targetStack.push(currentTarget);
+
+                diskStack.push(1);
+                sourceStack.push(currentSource);
+                auxiliaryStack.push(currentAuxiliary);
+                targetStack.push(currentTarget);
+
+                diskStack.push(currentDisk - 1);
+                sourceStack.push(currentSource);
+                auxiliaryStack.push(currentTarget);
+                targetStack.push(currentAuxiliary);
+            }
+        }
+    }
+}
